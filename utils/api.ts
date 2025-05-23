@@ -1,20 +1,7 @@
+import { Product } from "@/types/products";
+
 export const API_BASE_URL =
   process.env.EXPO_PUBLIC_API_URL || "https://fakestoreapi.com";
-
-export interface Product {
-  id: number;
-  title: string;
-  price: number;
-  description: string;
-  category: string;
-  image: string;
-  rating: Rating;
-}
-
-export interface Rating {
-  rate: number;
-  count: number;
-}
 
 export const getProducts = async (): Promise<Product[]> => {
   const response = await fetch(`${API_BASE_URL}/products`);
