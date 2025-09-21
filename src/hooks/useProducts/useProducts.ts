@@ -8,6 +8,7 @@ export interface UseProductsReturn {
   isError: boolean;
   error: Error | null;
   isSuccess: boolean;
+  isRefetching: boolean;
   refetch: () => void;
 }
 
@@ -28,6 +29,7 @@ export const useProducts = (): UseProductsReturn => {
     isLoading,
     isError,
     isSuccess,
+    isRefetching,
     error,
     refetch,
   } = useQuery({
@@ -42,5 +44,6 @@ export const useProducts = (): UseProductsReturn => {
     isError,
     isSuccess,
     refetch,
+    isRefetching,
   };
 };
