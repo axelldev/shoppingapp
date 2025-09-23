@@ -4,7 +4,14 @@ import { useProducts } from "@/hooks/useProducts";
 import { Colors } from "@/theme/colors";
 import { FlashList } from "@shopify/flash-list";
 import { useMemo, useState } from "react";
-import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 
 export default function Index() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -17,15 +24,27 @@ export default function Index() {
 
   const filteredProducts = useMemo(() => {
     return products.filter((product) => {
-      if (selectedCategory !== "all") {
-        return product.category === selectedCategory;
-      }
-      return product.title.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesSearch =
+        searchQuery === "" ||
+        product.title.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesCategory =
+        selectedCategory === "all" || product.category === selectedCategory;
+
+      return matchesSearch && matchesCategory;
     });
   }, [selectedCategory, products, searchQuery]);
 
   return (
     <View style={styles.container}>
+      <View style={styles.searchContainer}>
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Search products..."
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+          clearButtonMode="while-editing"
+        />
+      </View>
       <View style={styles.categories}>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {allCategories.map((category) => (
@@ -62,8 +81,23 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
   },
+  searchContainer: {
+    paddingHorizontal: 16,
+    paddingTop: 8,
+    paddingBottom: 4,
+  },
+  searchInput: {
+    height: 40,
+    borderColor: Colors.primary,
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    backgroundColor: "#fff",
+    fontSize: 16,
+  },
   categories: {
-    marginVertical: 8,
+    marginTop: 4,
+    marginBottom: 8,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
