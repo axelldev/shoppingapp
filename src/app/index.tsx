@@ -1,17 +1,11 @@
+import CategoryItem from "@/components/product/CategoryItem";
 import ProductCard from "@/components/product/ProductCard";
 import { useCategories } from "@/hooks/useCategories";
 import { useProducts } from "@/hooks/useProducts";
 import { Colors } from "@/theme/colors";
 import { FlashList } from "@shopify/flash-list";
 import { useMemo, useState } from "react";
-import {
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
+import { ScrollView, StyleSheet, TextInput, View } from "react-native";
 
 export default function Index() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -36,33 +30,28 @@ export default function Index() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.searchContainer}>
-        <TextInput
-          style={styles.searchInput}
-          placeholder="Search products..."
-          value={searchQuery}
-          onChangeText={setSearchQuery}
-          clearButtonMode="while-editing"
-        />
-      </View>
-      <View style={styles.categories}>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {allCategories.map((category) => (
-            <Pressable
-              style={[
-                styles.category,
-                {
-                  backgroundColor:
-                    selectedCategory === category ? Colors.primary : "#f0f0f0",
-                },
-              ]}
-              key={category}
-              onPress={() => setCategory(category)}
-            >
-              <Text>{category}</Text>
-            </Pressable>
-          ))}
-        </ScrollView>
+      <View style={styles.filtersContainer}>
+        <View style={styles.searchContainer}>
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Search products..."
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+            clearButtonMode="while-editing"
+          />
+        </View>
+        <View style={styles.categories}>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            {allCategories.map((category) => (
+              <CategoryItem
+                key={category}
+                category={category}
+                isSelected={category === selectedCategory}
+                onPress={() => setCategory(category)}
+              />
+            ))}
+          </ScrollView>
+        </View>
       </View>
       <FlashList
         data={filteredProducts}
@@ -82,22 +71,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   searchContainer: {
-    paddingHorizontal: 16,
+    paddingHorizontal: 8,
     paddingTop: 8,
     paddingBottom: 4,
   },
-  searchInput: {
-    height: 40,
-    borderColor: Colors.primary,
-    borderWidth: 1,
-    borderRadius: 8,
-    paddingHorizontal: 12,
+  filtersContainer: {
     backgroundColor: "#fff",
-    fontSize: 16,
-  },
-  categories: {
-    marginTop: 4,
-    marginBottom: 8,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -107,10 +86,17 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
-  category: {
-    padding: 8,
-    borderRadius: 8,
-    backgroundColor: "#f0f0f0",
-    marginHorizontal: 8,
+  searchInput: {
+    height: 40,
+    borderColor: Colors.primary,
+    borderWidth: 1,
+    borderRadius: 16,
+    paddingHorizontal: 12,
+    backgroundColor: "#fff",
+    fontSize: 16,
+  },
+  categories: {
+    marginTop: 4,
+    marginBottom: 8,
   },
 });
